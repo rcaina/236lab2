@@ -369,8 +369,13 @@ Lexer::Lexer(char* readMe) {
         
         }
 
-        cout << "Total Tokens = " << k << "\n";
+       // cout << "Total Tokens = " << k << "\n";
 }
+
+vector <Tokens> Lexer::getVector(){
+
+	return myTokens;
+}	
 
 
 

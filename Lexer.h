@@ -15,7 +15,7 @@ class Lexer {
 public:
 	Lexer(){}
 	Lexer(char* readMe);
-
+	vector <Tokens> getVector();
 
 
 private:
