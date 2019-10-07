@@ -45,7 +45,7 @@ private:
 	void predicate();
 	void predicateList();
 	void parameterList();
-	void stringist();
+	void stringList();
 	void idList();
 	void parameter();
 	void expression();
