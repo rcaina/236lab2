@@ -13,7 +13,7 @@ using namespace std;
 class parser {
 
 public:
-	parser(){}
+//	parser(){}
 	parser();
 
 	void startParser(){

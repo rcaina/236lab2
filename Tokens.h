@@ -24,7 +24,7 @@ public:
 	void set_type(string cat);
 	void set_symbol(string sign);
 	void set_line(int num);
-	void toString();
+	string toString();
 
 
 private:

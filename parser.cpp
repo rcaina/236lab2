@@ -62,3 +62,5 @@ void parser::checkRemove(string data){
 	throw parsingTokens.begin();
 
 }
+
+
