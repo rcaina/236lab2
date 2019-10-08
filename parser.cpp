@@ -52,17 +52,20 @@ void parser::checkRemove(string data){
 	if(parsingTokens.front().get_type() == data){
 
 		parsingTokens.erase(parsingTokens.begin());
+		
+		data = "";
 
 		return;
 	}
 	
-	throw parsingTokens.begin();
+	throw *(parsingTokens.begin());
 }
 
 void parser::scheme(){
 
 	checkRemove("ID");
 	checkRemove("LEFT_PAREN");
+	checkRemove("ID");
 	idList();
 	checkRemove("RIGHT_PAREN");
 }
@@ -89,15 +92,14 @@ void parser::rule(){
 void parser::query(){
 
         predicate();
-	checkRemove("?");
+	checkRemove("Q_MARK");
 }
 
 void parser::schemeList(){
 
-	scheme();
-
 	while (parsingTokens.front().get_type() != "FACTS"){
 		
+		scheme();	
 		schemeList();
 
 	}
@@ -105,9 +107,9 @@ void parser::schemeList(){
 
 void parser::factList(){
 
-	fact();
 	while (parsingTokens.front().get_type() != "RULES"){
-                
+		
+		fact();		
                 factList();
 
         }
@@ -115,9 +117,9 @@ void parser::factList(){
 
 void parser::ruleList(){
 
-        rule();
-        while (parsingTokens.front().get_type() != "RULES"){
-
+        while (parsingTokens.front().get_type() != "QUERIES"){
+		
+		rule();
                 ruleList();
 
         }
@@ -125,9 +127,9 @@ void parser::ruleList(){
 
 void parser::queryList(){
 
-	query();
-        while (parsingTokens.front().get_type() != "RULES"){
-
+        while (parsingTokens.front().get_type() != "EOF"){
+		
+		query();
                 queryList();
 
         }
@@ -137,6 +139,7 @@ void parser::headPredicate(){
 
 	checkRemove("ID");
         checkRemove("LEFT_PAREN");
+	checkRemove("ID");
         idList();
         checkRemove("RIGHT_PAREN");
 }
@@ -151,44 +154,41 @@ void parser::predicate(){
 }
 
 void parser::predicateList(){
-
-	checkRemove("COMMA");
-	predicate();
-	while(parsingTokens.front().get_type() != "RIGHT_PAREN"){
-		
-		predicateList();
 	
+	while(parsingTokens.front().get_type() != "PERIOD"){
+		
+		checkRemove("COMMA");
+		predicate();
+		predicateList();
 	}
 }
 
 void parser::parameterList(){
 
-	checkRemove("COMMA");
-        parameter();
         while(parsingTokens.front().get_type() != "RIGHT_PAREN"){
-
+		
+		checkRemove("COMMA");
+		parameter();	
                 parameterList();
-
         }
 }
 
 void parser::stringList(){
 
-	checkRemove("COMMA");
-        checkRemove("STRING");
         while(parsingTokens.front().get_type() != "RIGHT_PAREN"){
-
+		
+		checkRemove("COMMA");
+		checkRemove("STRING");
                 stringList();
-
         }
 }
 
 void parser::idList(){
 
-	checkRemove("COMMA");
-        checkRemove("ID");
         while(parsingTokens.front().get_type() != "RIGHT_PAREN"){
-
+		
+		checkRemove("COMMA");
+		checkRemove("ID");
                 idList();
 
         }
@@ -207,7 +207,6 @@ void parser::parameter(){
 		return;
 	}
 	else{
-
 		expression();
 	}
 }
