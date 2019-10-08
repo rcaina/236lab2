@@ -6,6 +6,8 @@
 #include <ctype.h>
 #include "parser.h"
 #include "Tokens.h"
+#include "predicate.h"
+#include "rulez.h"
 
 using namespace std;
 
@@ -39,7 +41,7 @@ void parser::datalogProgram(){
 		queryList();
 		checkRemove("EOF");
 
-		cout << "success" << endl;
+		cout << "Success !" << endl;
 	}
 	catch(Tokens F){
 

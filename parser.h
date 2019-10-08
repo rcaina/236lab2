@@ -7,13 +7,14 @@
 #include <fstream>
 #include <vector>
 #include "Tokens.h"
+#include "predicate.h"
+#include "rulez.h"
 
 using namespace std;
 
 class parser {
 
 public:
-//	parser(){}
 	parser();
 
 	void startParser(){
