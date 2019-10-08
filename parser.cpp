@@ -47,6 +47,27 @@ void parser::datalogProgram(){
 
 		cout << "Failure\n  " << F.toString();
 	}
+
+	for(unsigned i = 0; i < schemes.size(); i++){
+
+		cout << schemes[i].to_string() << endl;
+	}
+
+	for(unsigned i = 0; i < facts.size(); i++){
+
+                cout << facts[i].to_string() << "."<< endl;
+        }
+
+	for(unsigned i = 0; i < rules.size(); i++){
+
+                cout << rules[i].to_string() << "?" << endl;
+        }
+
+	for(unsigned i = 0; i < queries.size(); i++){
+
+                cout << queries[i].to_string() << "?" << endl;
+        }
+
 }
 
 void parser::checkRemove(string data){
@@ -65,36 +86,57 @@ void parser::checkRemove(string data){
 
 void parser::scheme(){
 
+	string item = "";
+
+	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
+	current.set_name(item);
 	checkRemove("LEFT_PAREN");
+	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
+	current.set_item(item);
 	idList();
 	checkRemove("RIGHT_PAREN");
+	schemes.push_back(current);
+	current.clear();
 }
 
 void parser::fact(){
 
+	string item = "";
+
+        item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
+	current.set_name(item);
         checkRemove("LEFT_PAREN");
+	item = parsingTokens.front().get_symbol();
 	checkRemove("STRING");
+	current.set_item(item);
         stringList();
         checkRemove("RIGHT_PAREN");
 	checkRemove("PERIOD");
+	facts.push_back(current);
+        current.clear();
+
 }
 
 void parser::rule(){
 
+
 	headPredicate();
 	checkRemove("COLON_DASH");
-	predicate();
+	newPredicate();
 	predicateList();
 	checkRemove("PERIOD");
 }
 
 void parser::query(){
 
-        predicate();
+        newPredicate();
 	checkRemove("Q_MARK");
+	queries.push_back(current);
+        current.clear();
+
 }
 
 void parser::schemeList(){
@@ -146,9 +188,12 @@ void parser::headPredicate(){
         checkRemove("RIGHT_PAREN");
 }
 
-void parser::predicate(){
-
+void parser::newPredicate(){
+	
+	string item = "";
+	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
+	current.set_name(item);
         checkRemove("LEFT_PAREN");
         parameter();
 	parameterList();
@@ -160,7 +205,7 @@ void parser::predicateList(){
 	while(parsingTokens.front().get_type() != "PERIOD"){
 		
 		checkRemove("COMMA");
-		predicate();
+		newPredicate();
 		predicateList();
 	}
 }
@@ -180,7 +225,9 @@ void parser::stringList(){
         while(parsingTokens.front().get_type() != "RIGHT_PAREN"){
 		
 		checkRemove("COMMA");
+		string item = parsingTokens.front().get_symbol();
 		checkRemove("STRING");
+		current.set_item(item);
                 stringList();
         }
 }
@@ -190,22 +237,30 @@ void parser::idList(){
         while(parsingTokens.front().get_type() != "RIGHT_PAREN"){
 		
 		checkRemove("COMMA");
+		string item = parsingTokens.front().get_symbol();
 		checkRemove("ID");
+		current.set_item(item);
                 idList();
 
         }
 }
-// DOUBLE CHECK THIS FUNCTION
+
 void parser::parameter(){
+
+	string item = "";
 
 	if(parsingTokens.front().get_type() == "STRING"){
 
+       	 	item = parsingTokens.front().get_symbol();
 		checkRemove("STRING");
+		current.set_item(item);
 		return;
 	}
 	else if(parsingTokens.front().get_type() == "ID"){
 
-		checkRemove("ID");
+		item = parsingTokens.front().get_symbol();
+                checkRemove("ID");
+                current.set_item(item);
 		return;
 	}
 	else{
@@ -222,7 +277,7 @@ void parser::expression(){
 	checkRemove("RIGHT_PAREN");
 
 }
-// DOUBLE CHECK THIS FUNCTION
+
 void parser::operate(){
 
 	if(parsingTokens.front().get_type() == "ADD"){

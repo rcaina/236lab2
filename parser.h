@@ -31,6 +31,14 @@ public:
 private:
 
 	vector <Tokens> parsingTokens;
+	
+	vector <predicate> schemes;
+        vector <predicate> facts;
+        vector <predicate> queries;
+        vector <rulez> rules;
+
+	predicate current;
+	rulez currentrule;
 
 	void checkRemove(string);
 	void datalogProgram();
@@ -43,7 +51,7 @@ private:
 	void rule();
 	void query();
 	void headPredicate();
-	void predicate();
+	void newPredicate();
 	void predicateList();
 	void parameterList();
 	void stringList();

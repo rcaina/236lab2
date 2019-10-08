@@ -12,17 +12,17 @@ using namespace std;
 class predicate {
 
 public:
-        predidcate(){}
-        predicate() {}
-
+        
+        predicate(){};
+	void set_name(string name);
+	void set_item(string item);
+	string to_string();
+	void clear();
 
 private:
 
-	vector <Schemes> schemes;
-	vector <Facts> facts;
-	vector <Queries> queries;
-	vector <Rules> rules;
-
+	string name;
+	vector <string> items;
 
 };
 #endif

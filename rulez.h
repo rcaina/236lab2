@@ -6,19 +6,21 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include "predicate.h"
 
 using namespace std;
 
 class rulez {
 
 public:
-        rulez(){}
-        rulez() {}
+        rulez(){};
 
+	void set_rulezPredicate(vector <predicate> rulezPred);
+	string to_string();
 
 private:
 
-        vector <Rules> rules;
+	vector <predicate> allrules;      
 
 };
 #endif
