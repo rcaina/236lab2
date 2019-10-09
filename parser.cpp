@@ -8,6 +8,7 @@
 #include "Tokens.h"
 #include "predicate.h"
 #include "rulez.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -41,31 +42,39 @@ void parser::datalogProgram(){
 		queryList();
 		checkRemove("EOF");
 
-		cout << "Success !" << endl;
+		cout << "Success!" << endl;
 	}
 	catch(Tokens F){
 
 		cout << "Failure\n  " << F.toString();
 	}
+	
+	cout << "Schemes(" << schemes.size() << ")" << endl;
 
 	for(unsigned i = 0; i < schemes.size(); i++){
 
-		cout << schemes[i].to_string() << endl;
+		cout << "  " <<schemes[i].to_string() << endl;
 	}
+
+	cout << "Facts(" << facts.size() << ")" << endl;
 
 	for(unsigned i = 0; i < facts.size(); i++){
 
-                cout << facts[i].to_string() << "."<< endl;
+                cout << "  " << facts[i].to_string() << "."<< endl;
         }
+	
+	cout << "Rules(" << rules.size() << ")" << endl;
 
 	for(unsigned i = 0; i < rules.size(); i++){
 
-                cout << rules[i].to_string() << "?" << endl;
+                cout << "  " << rules[i].to_String() << "?" << endl;
         }
+
+	cout << "Queries(" << queries.size() << ")" << endl;
 
 	for(unsigned i = 0; i < queries.size(); i++){
 
-                cout << queries[i].to_string() << "?" << endl;
+                cout << "  " << queries[i].to_string() << "?" << endl;
         }
 
 }
@@ -128,6 +137,7 @@ void parser::rule(){
 	newPredicate();
 	predicateList();
 	checkRemove("PERIOD");
+	rules.push_back(currentrule);
 }
 
 void parser::query(){
@@ -181,11 +191,18 @@ void parser::queryList(){
 
 void parser::headPredicate(){
 
+	string item = "";
+
+        item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
+	current.set_name(item);
         checkRemove("LEFT_PAREN");
+	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
+	current.set_item(item);
         idList();
         checkRemove("RIGHT_PAREN");
+	rules.push_back();
 }
 
 void parser::newPredicate(){

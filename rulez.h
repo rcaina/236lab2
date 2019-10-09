@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include "predicate.h"
+#include "parser.h"
 
 using namespace std;
 
@@ -14,9 +15,9 @@ class rulez {
 
 public:
         rulez(){};
-
+	
 	void set_rulezPredicate(vector <predicate> rulezPred);
-	string to_string();
+	string to_String();
 
 private:
 

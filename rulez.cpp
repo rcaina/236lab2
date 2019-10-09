@@ -1,3 +1,4 @@
+#include "parser.h"
 #include "rulez.h"
 #include "predicate.h"
 #include <string>
@@ -12,8 +13,7 @@ void rulez::set_rulezPredicate(vector <predicate> rulezPred){
         allrules = rulezPred;
 }
 
-string rulez::to_string(){
-
+string rulez::to_String(){
 
         stringstream ss;
         ss << allrules[0].to_string() << " :- " << allrules[1].to_string();
