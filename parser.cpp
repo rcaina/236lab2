@@ -285,6 +285,7 @@ void parser::parameter(){
 		
 			checkRemove("STRING");
 			current.set_item(item);
+			item = "";
 			return;
 		}
 		else if(parsingTokens.front().get_type() == "ID"){
@@ -292,6 +293,7 @@ void parser::parameter(){
 			item = parsingTokens.front().get_symbol();
                 	checkRemove("ID");
                 	current.set_item(item);
+			item = "";
 			return;
 		}
 		else{
@@ -322,17 +324,19 @@ void parser::parameter(){
 void parser::expression(){
 
 	level++;
+	item = item + parsingTokens.front().get_symbol();
 	checkRemove("LEFT_PAREN");
 	parameter();
 	operate();
 	parameter();
+	item = item + parsingTokens.front().get_symbol();
 	checkRemove("RIGHT_PAREN");
 	level--;
-//	if(level == 0){
+	if(level == 0){
 //
-//		current.set_item(item);
+		current.set_item(item);
 //		current.clear();
-//	}
+	}
 }
 
 void parser::operate(){
