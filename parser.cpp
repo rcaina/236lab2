@@ -277,7 +277,7 @@ void parser::idList(){
 
 void parser::parameter(){
 
-	if(itsTime == false){
+	if(level == 0){
 
 		if(parsingTokens.front().get_type() == "STRING"){
 
@@ -303,13 +303,13 @@ void parser::parameter(){
 
 		if(parsingTokens.front().get_type() == "STRING"){
 			
-															//			item = parsingTokens.front().get_symbol();
+			item = parsingTokens.front().get_symbol();
                         checkRemove("STRING");
                         return;
                 }
                 else if(parsingTokens.front().get_type() == "ID"){
 			
-															//			item = parsingTokens.front().get_symbol();
+			item = parsingTokens.front().get_symbol();
                         checkRemove("ID");
                         return;
                 }
@@ -317,31 +317,35 @@ void parser::parameter(){
                         expression();
                 }
 	}
-															//	current.set_item(item);
 }
 
 void parser::expression(){
 
-	itsTime = true;
+	level++;
 	checkRemove("LEFT_PAREN");
 	parameter();
 	operate();
 	parameter();
 	checkRemove("RIGHT_PAREN");
-	itsTime = false;
+	level--;
+	if(level == 0){
+
+		current.set_item(item);
+		current.clear();
+	}
 }
 
 void parser::operate(){
 
 	if(parsingTokens.front().get_type() == "ADD"){
 		
-															//		item = parsingTokens.front().get_symbol();
+		item = parsingTokens.front().get_symbol();
                 checkRemove("ADD");
                 return;
         }
         else if(parsingTokens.front().get_type() == "MULTIPLY"){
 
-															//		item = parsingTokens.front().get_symbol();
+		item = parsingTokens.front().get_symbol();
                 checkRemove("MULTIPLY");
                 return;
         }

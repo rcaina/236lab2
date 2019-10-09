@@ -42,7 +42,7 @@ private:
 	rulez currentrule;
 	string item = "";
 	
-	bool itsTime = false;
+	int level = 0;
 	
 	void checkRemove(string);
 	void datalogProgram();
