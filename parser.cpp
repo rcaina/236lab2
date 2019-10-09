@@ -46,36 +46,48 @@ void parser::datalogProgram(){
 	}
 	catch(Tokens F){
 
-		cout << "Failure\n  " << F.toString();
+		cout << "Failure!\n  " << F.toString();
+		return;
 	}
 	
-	cout << "Schemes(" << schemes.size() << ")" << endl;
+	cout << "Schemes(" << schemes.size() << "):" << endl;
 
 	for(unsigned i = 0; i < schemes.size(); i++){
 
 		cout << "  " <<schemes[i].to_string() << endl;
 	}
 
-	cout << "Facts(" << facts.size() << ")" << endl;
+	cout << "Facts(" << facts.size() << "):" << endl;
 
 	for(unsigned i = 0; i < facts.size(); i++){
 
                 cout << "  " << facts[i].to_string() << "."<< endl;
         }
 	
-	cout << "Rules(" << rules.size() << ")" << endl;
+	cout << "Rules(" << rules.size() << "):" << endl;
 
 	for(unsigned i = 0; i < rules.size(); i++){
 
-                cout << "  " << rules[i].to_String() << "?" << endl;
+                cout << "  " << rules[i].to_String() << "." << endl;
         }
 
-	cout << "Queries(" << queries.size() << ")" << endl;
+	cout << "Queries(" << queries.size() << "):" << endl;
 
 	for(unsigned i = 0; i < queries.size(); i++){
 
                 cout << "  " << queries[i].to_string() << "?" << endl;
         }
+
+	sort(stringDomain.begin(), stringDomain.end());
+	stringDomain.erase(unique(stringDomain.begin(), stringDomain.end()), stringDomain.end());	
+	cout << "Domain(" << stringDomain.size() << "):" << endl;
+
+	
+	for(unsigned i = 0; i < stringDomain.size(); i++){
+
+		cout << "  " << stringDomain[i] << endl; 	
+
+	}
 
 }
 
@@ -95,8 +107,6 @@ void parser::checkRemove(string data){
 
 void parser::scheme(){
 
-	string item = "";
-
 	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
 	current.set_name(item);
@@ -112,13 +122,12 @@ void parser::scheme(){
 
 void parser::fact(){
 
-	string item = "";
-
         item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
 	current.set_name(item);
         checkRemove("LEFT_PAREN");
 	item = parsingTokens.front().get_symbol();
+	stringDomain.push_back(item);
 	checkRemove("STRING");
 	current.set_item(item);
         stringList();
@@ -126,23 +135,22 @@ void parser::fact(){
 	checkRemove("PERIOD");
 	facts.push_back(current);
         current.clear();
-
 }
 
 void parser::rule(){
-//create new empty rule
+	
 	headPredicate();
-//pushback new head predicate into empty rule
 	currentrule.set_head(current);        	
 	checkRemove("COLON_DASH");
+	current.clear();
 	newPredicate();
-	currentrule.add_predicate(current);	
+	currentrule.add_predicate(current);
+	current.clear();	
 	predicateList();
-//push vector of predicate into rule
 	checkRemove("PERIOD");
 	rules.push_back(currentrule);
 	currentrule.clearCurrentRule();
-//pushback rule into rule vector
+	current.clear();
 }
 
 void parser::query(){
@@ -151,7 +159,6 @@ void parser::query(){
 	checkRemove("Q_MARK");
 	queries.push_back(current);
         current.clear();
-
 }
 
 void parser::schemeList(){
@@ -196,7 +203,6 @@ void parser::queryList(){
 
 void parser::headPredicate(){
 
-	string item = "";
 	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
 	current.set_name(item);
@@ -211,7 +217,6 @@ void parser::headPredicate(){
 
 void parser::newPredicate(){
 	
-	string item = "";
 	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
 	current.set_name(item);
@@ -219,6 +224,7 @@ void parser::newPredicate(){
         parameter();
 	parameterList();
         checkRemove("RIGHT_PAREN");
+	
 }
 
 void parser::predicateList(){
@@ -228,6 +234,7 @@ void parser::predicateList(){
 		checkRemove("COMMA");
 		newPredicate();
 		currentrule.add_predicate(current);
+		current.clear();
 		predicateList();
 	}
 }
@@ -248,6 +255,7 @@ void parser::stringList(){
 		
 		checkRemove("COMMA");
 		string item = parsingTokens.front().get_symbol();
+		stringDomain.push_back(item);
 		checkRemove("STRING");
 		current.set_item(item);
                 stringList();
@@ -269,46 +277,71 @@ void parser::idList(){
 
 void parser::parameter(){
 
-	string item = "";
+	if(itsTime == false){
 
-	if(parsingTokens.front().get_type() == "STRING"){
+		if(parsingTokens.front().get_type() == "STRING"){
 
-       	 	item = parsingTokens.front().get_symbol();
-		checkRemove("STRING");
-		current.set_item(item);
-		return;
-	}
-	else if(parsingTokens.front().get_type() == "ID"){
+       	 		item = parsingTokens.front().get_symbol();
+		
+			checkRemove("STRING");
+			current.set_item(item);
+			return;
+		}
+		else if(parsingTokens.front().get_type() == "ID"){
 
-		item = parsingTokens.front().get_symbol();
-                checkRemove("ID");
-                current.set_item(item);
-		return;
+			item = parsingTokens.front().get_symbol();
+                	checkRemove("ID");
+                	current.set_item(item);
+			return;
+		}
+		else{
+			expression();
+		}
+
 	}
 	else{
-		expression();
+
+		if(parsingTokens.front().get_type() == "STRING"){
+			
+															//			item = parsingTokens.front().get_symbol();
+                        checkRemove("STRING");
+                        return;
+                }
+                else if(parsingTokens.front().get_type() == "ID"){
+			
+															//			item = parsingTokens.front().get_symbol();
+                        checkRemove("ID");
+                        return;
+                }
+                else{
+                        expression();
+                }
 	}
+															//	current.set_item(item);
 }
 
 void parser::expression(){
 
+	itsTime = true;
 	checkRemove("LEFT_PAREN");
 	parameter();
 	operate();
 	parameter();
 	checkRemove("RIGHT_PAREN");
-
+	itsTime = false;
 }
 
 void parser::operate(){
 
 	if(parsingTokens.front().get_type() == "ADD"){
-
+		
+															//		item = parsingTokens.front().get_symbol();
                 checkRemove("ADD");
                 return;
         }
         else if(parsingTokens.front().get_type() == "MULTIPLY"){
 
+															//		item = parsingTokens.front().get_symbol();
                 checkRemove("MULTIPLY");
                 return;
         }

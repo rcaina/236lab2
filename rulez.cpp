@@ -39,5 +39,6 @@ string rulez::to_String(){
 }
 void rulez::clearCurrentRule(){
 
+	allrules.clear();
 	headpredicate.clear();
 }

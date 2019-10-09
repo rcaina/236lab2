@@ -36,10 +36,14 @@ private:
         vector <predicate> facts;
         vector <predicate> queries;
         vector <rulez> rules;
+	vector <string>	stringDomain;
 
 	predicate current;
 	rulez currentrule;
-
+	string item = "";
+	
+	bool itsTime = false;
+	
 	void checkRemove(string);
 	void datalogProgram();
 	void schemeList();
