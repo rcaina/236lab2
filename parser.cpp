@@ -130,14 +130,19 @@ void parser::fact(){
 }
 
 void parser::rule(){
-
-
+//create new empty rule
 	headPredicate();
+//pushback new head predicate into empty rule
+	currentrule.set_head(current);        	
 	checkRemove("COLON_DASH");
 	newPredicate();
+	currentrule.add_predicate(current);	
 	predicateList();
+//push vector of predicate into rule
 	checkRemove("PERIOD");
 	rules.push_back(currentrule);
+	currentrule.clearCurrentRule();
+//pushback rule into rule vector
 }
 
 void parser::query(){
@@ -192,8 +197,7 @@ void parser::queryList(){
 void parser::headPredicate(){
 
 	string item = "";
-
-        item = parsingTokens.front().get_symbol();
+	item = parsingTokens.front().get_symbol();
 	checkRemove("ID");
 	current.set_name(item);
         checkRemove("LEFT_PAREN");
@@ -202,7 +206,7 @@ void parser::headPredicate(){
 	current.set_item(item);
         idList();
         checkRemove("RIGHT_PAREN");
-	rules.push_back();
+	
 }
 
 void parser::newPredicate(){
@@ -223,6 +227,7 @@ void parser::predicateList(){
 		
 		checkRemove("COMMA");
 		newPredicate();
+		currentrule.add_predicate(current);
 		predicateList();
 	}
 }

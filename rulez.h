@@ -16,11 +16,14 @@ class rulez {
 public:
         rulez(){};
 	
+	void set_head(predicate headPred);
+	void add_predicate(predicate newPred);
 	void set_rulezPredicate(vector <predicate> rulezPred);
 	string to_String();
+	void clearCurrentRule();
 
 private:
-
+	predicate headpredicate;
 	vector <predicate> allrules;      
 
 };

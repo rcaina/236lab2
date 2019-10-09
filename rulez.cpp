@@ -8,16 +8,23 @@
 
 using namespace std;
 
-void rulez::set_rulezPredicate(vector <predicate> rulezPred){
+void rulez::set_head(predicate headPred){
 
-        allrules = rulezPred;
+headpredicate = headPred;	
+
+}
+
+void rulez::add_predicate(predicate newPred){
+
+	allrules.push_back(newPred);
+
 }
 
 string rulez::to_String(){
 
         stringstream ss;
-        ss << allrules[0].to_string() << " :- " << allrules[1].to_string();
-        for(unsigned i = 2; i < allrules.size(); i++){
+        ss << headpredicate.to_string() << " :- ";
+        for(unsigned i = 0; i < allrules.size(); i++){
 
                 if(i == allrules.size() -1){
 
@@ -29,4 +36,8 @@ string rulez::to_String(){
         }
 
         return ss.str();
+}
+void rulez::clearCurrentRule(){
+
+	headpredicate.clear();
 }
