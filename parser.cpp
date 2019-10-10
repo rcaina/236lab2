@@ -330,15 +330,17 @@ void parser::expression(){
 	operate();
 	parameter();
 	item = item + parsingTokens.front().get_symbol();
-	checkRemove("RIGHT_PAREN");
+	//checkRemove("RIGHT_PAREN");
 	level--;
-	if(level != 0){
+	if(level != 0 && parsingTokens.front().get_type() != "RIGHT_PAREN"){
 		operate();
+		parameter();
 	}
 	if(level == 0){
 
 		current.set_item(item);
 	}
+	checkRemove("RIGHT_PAREN");
 }
 
 void parser::operate(){
