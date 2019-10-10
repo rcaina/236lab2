@@ -332,10 +332,12 @@ void parser::expression(){
 	item = item + parsingTokens.front().get_symbol();
 	checkRemove("RIGHT_PAREN");
 	level--;
+	if(level != 0){
+		operate();
+	}
 	if(level == 0){
-//
+
 		current.set_item(item);
-//		current.clear();
 	}
 }
 
@@ -347,7 +349,7 @@ void parser::operate(){
                 checkRemove("ADD");
                 return;
         }
-        else if(parsingTokens.front().get_type() == "MULTIPLY"){
+	else{
 
 		item = item + parsingTokens.front().get_symbol();
                 checkRemove("MULTIPLY");
